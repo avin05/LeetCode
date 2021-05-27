@@ -1,23 +1,36 @@
-Stack<Integer> stack = new Stack<>();
-        int i=0;
-        int j=0;
-        while(i < pushed.length || j<popped.length)
-        {
-            if(!stack.empty() && stack.peek() == popped[j])
-            {
-                stack.pop();
+class Solution {
+    public boolean validateStackSequences(int[] arr1, int[] arr2) {
+        
+        int n = arr1.length;
+        Stack<Integer> st = new Stack<>();
+        
+        int i=0,j=0;
+        
+        while(i!=n){
+            if(st.isEmpty()){
+                st.push(arr1[i++]);
+            }
+            
+            else if(st.peek() == arr2[j]){
+                st.pop();
                 j++;
             }
-            else
-            {
-                if(i<pushed.length)
-                {
-                    stack.push(pushed[i]);
-                    i++;
-                }
-                else{
-                    return false;
-                }
+            else {
+                st.push(arr1[i++]);
+                
+            }
+        }
+        
+        while(st.size()>0){
+            int c = st.pop();
+            
+            if(c == arr2[j]){
+                j++;
+            }
+            else{
+                return false;
             }
         }
         return true;
+    }
+}

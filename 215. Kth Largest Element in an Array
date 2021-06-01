@@ -1,0 +1,43 @@
+class Solution {
+    public static void swap(int[] arr,int i,int j){
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
+    public static int partition(int[] arr,int pivot,int low,int high){
+        int i =low,j = low;
+        while(i<=high){
+            if(arr[i]>pivot){
+                i++;
+            }
+            else{
+                swap(arr,i,j);
+                i++;
+                j++;
+            }
+        }
+        
+        return j-1;
+    }
+    public static int quickSelect(int[] nums,int k,int low,int high){
+        int pivot = nums[high];
+        int pi = partition(nums,pivot,low,high);
+        int ans =0;
+        if(pi == (nums.length-k)){
+            ans = nums[pi];
+        }
+        else if(pi < (nums.length-k)){
+            ans = quickSelect(nums,k,pi+1,high);
+        }
+        else{
+            ans = quickSelect(nums,k,low,pi-1);
+        }
+        
+        return ans;
+    }
+    public int findKthLargest(int[] nums, int k) {
+        int res = quickSelect(nums,k,0,nums.length-1);
+        return res;
+    }
+}

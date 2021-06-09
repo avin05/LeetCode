@@ -1,0 +1,23 @@
+class Solution {
+    public static int sum =0;
+    
+    public static void solve(TreeNode root){
+        if(root == null ){
+            return;
+        }
+        
+        solve(root.right);
+        sum +=root.val;
+        root.val = sum;
+        
+        solve(root.left);
+        
+        
+        
+    }
+    public TreeNode convertBST(TreeNode root) {
+        solve(root);
+        return root;
+        
+    }
+}

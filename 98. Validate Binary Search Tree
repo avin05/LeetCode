@@ -1,0 +1,18 @@
+class Solution {
+    TreeNode prev = null;
+    boolean ans = true;
+    public boolean isValidBST(TreeNode root) {
+        inOrder(root);
+        return ans;
+    }
+    public boolean inOrder(TreeNode root){
+        if(root==null)
+            return true;
+        inOrder(root.left);
+        if(prev!=null)
+            ans = ans && prev.val<root.val;
+        prev=root;
+        inOrder(root.right);
+        return true;
+    }
+}

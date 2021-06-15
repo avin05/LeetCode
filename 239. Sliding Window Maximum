@@ -1,0 +1,41 @@
+class Solution {
+    
+    public static int[] ngr(int[] arr,int n){
+        int[] res = new int[n];
+        Stack<Integer> st = new Stack<>();
+        
+        for(int i=n-1;i>=0;i--){
+            if(st.isEmpty()){
+                st.push(i);
+                res[i] = n;
+            }
+            else if(arr[i]<arr[st.peek()]){
+                res[i] = st.peek();
+                st.push(i);
+            }
+            else if(arr[i]>=arr[st.peek()]){
+                st.pop();
+                i++;
+            }
+           
+        }
+        
+        return res;
+    }
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int[] nextG = ngr(nums,nums.length);
+        int[] ans = new int[nums.length-k+1];
+        
+        for(int i=0;i<=nums.length-k;i++){
+            int j=i;
+            
+            while(nextG[j] < i+k){
+                j = nextG[j];
+            }
+            
+            ans[i]=nums[j];
+        }
+        
+        return ans;
+    }
+}

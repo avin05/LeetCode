@@ -1,0 +1,36 @@
+class Solution {
+    
+    public static int[] xdir = {-1,0,1,0};
+    public static int[] ydir = {0,-1,0,1};
+    public static int areaIsland(int[][] grid,int x,int y){
+        grid[x][y] =-1;
+        int area =1;
+        
+        for(int d=0;d<4;d++){
+            int r = x+xdir[d];
+            int c = y+ydir[d];
+            
+            if(r>=0 && r<grid.length && c>=0 && c<grid[0].length && grid[r][c]==1){
+                area+=areaIsland(grid,r,c);
+            }
+        }
+        
+        return area;
+    }
+    public int maxAreaOfIsland(int[][] grid) {
+        int maxArea = 0;
+        
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    int area = areaIsland(grid,i,j);
+                    if(area>maxArea){
+                        maxArea = area;
+                    }
+                }
+            }
+        }
+        
+        return maxArea;
+    }
+}

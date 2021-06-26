@@ -1,0 +1,27 @@
+class Solution {
+    
+    public int solve(int n,int[] dp){
+        if(n == 1){
+            return dp[0]=1;
+        }
+        
+        if(dp[n]!=0){
+            return dp[n];
+        }
+        int count =0;
+        
+        for(int i=1;i<=2;i++){
+            count+=solve(n-i,dp);
+        }
+        
+        return dp[n]=count;
+    }
+
+    public int climbStairs(int n) {
+        
+      int[] dp = new int[n+1];
+    int ans = solve(n,dp);
+        return ans;
+        
+    }
+}

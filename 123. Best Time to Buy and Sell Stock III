@@ -1,0 +1,53 @@
+class Solution {
+    public int maxProfit(int[] price) {
+        
+        int mpist  =0;
+        int leastsf = price[0];
+        int[] dp = new int[price.length];
+        
+        for(int i=1;i<price.length;i++){
+            
+            if(price[i]<leastsf){
+                leastsf = price[i];
+            }
+            
+            mpist = price[i]-leastsf;
+            
+            if(mpist > dp[i-1]){
+                dp[i] =mpist;
+            }else{
+                dp[i] = dp[i-1];
+            }
+        }
+        
+        int mpibt  =0;
+        int maxat = price[price.length-1];
+        int[] dp1 = new int[price.length];
+        
+        for(int i=price.length-2;i>=0;i--){
+            
+            if(price[i]>maxat){
+                maxat = price[i];
+            }
+            
+            mpibt = maxat-price[i];
+            
+            if(mpibt > dp1[i+1]){
+                dp1[i]= mpibt;
+            }else{
+                dp1[i] = dp1[i+1];
+            }
+        }
+        
+        int op =0;
+        
+        for(int i=0;i<price.length;i++){
+            if(dp[i]+dp1[i]>op){
+                op = dp[i]+dp1[i];
+            }
+        }
+        
+        return op;
+        
+    }
+}

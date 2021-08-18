@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    //pointers[0]-> prev
+    //pointers[1]-> curr
+    //pointers[2]-> a
+    //pointers[3]-> b
+    public void inOrder(TreeNode root,TreeNode[] pointers){
+        if(root == null){
+            return;
+        }
+        
+        inOrder(root.left,pointers);
+        if(pointers[0] == null){
+            pointers[0] = root;
+        }else{
+            pointers[1]=root;
+            
+            if(pointers[1].val<pointers[0].val){
+                if(pointers[2] == null){
+                    
+                pointers[2] = pointers[0];
+                pointers[3] = pointers[1];
+                }else{
+                    pointers[3] = pointers[1];
+                }
+            }
+            pointers[0] = root;
+        }
+        inOrder(root.right,pointers);
+        
+    }
+    public void recoverTree(TreeNode root) {
+        TreeNode[] pointers = new TreeNode[4];
+        inOrder(root,pointers);
+        int temp = pointers[2].val;
+        pointers[2].val = pointers[3].val;
+        pointers[3].val = temp;
+        
+    }
+}

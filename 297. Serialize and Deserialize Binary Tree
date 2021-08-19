@@ -1,0 +1,91 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public  class Pair{
+        TreeNode node;
+        int state;
+        
+        public Pair(TreeNode node,int state){
+            this.node = node;
+            this.state = state;
+        }
+    }
+     public void serial(TreeNode root,StringBuilder sb){
+        if(root == null){
+            sb.append("null#");
+            return;
+        }
+        sb.append(root.val+"#");
+        serial(root.left,sb);
+        serial(root.right,sb);
+        
+    }
+    public String serialize(TreeNode root) {
+         StringBuilder sb = new StringBuilder();
+        serial(root,sb);
+        return sb.toString();
+
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String str) {
+         if(str.equals("null#")){
+            return null;
+        }
+        
+        String[] data = str.split("#");
+        int indx =1;
+        TreeNode root = new TreeNode(Integer.parseInt(data[0]));
+        Stack<Pair> st = new Stack<>();
+        st.push(new Pair(root,0));
+        while(indx<data.length){
+            
+            if(st.peek().state == 2){
+                st.pop();
+                continue;
+            }
+            
+            if(st.peek().state == 0){
+                if(data[indx].equals("null")){
+                    st.peek().state++;
+                    indx++;
+                }else{
+                    TreeNode nn = new TreeNode(Integer.parseInt(data[indx]));
+                    indx++;
+                    st.peek().node.left = nn;
+                    st.peek().state++;
+                    st.push(new Pair(nn,0));
+                }
+            }else{
+                if(data[indx].equals("null")){
+                    st.peek().state++;
+                    indx++;
+                }else{
+                    TreeNode nn = new TreeNode(Integer.parseInt(data[indx]));
+                    indx++;
+                    st.peek().node.right = nn;
+                    st.peek().state++;
+                    st.push(new Pair(nn,0));
+                }
+            }
+                
+            }
+        
+        return root;
+        
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));

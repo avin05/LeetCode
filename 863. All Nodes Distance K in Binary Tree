@@ -1,0 +1,58 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<TreeNode> nodeToRoot(TreeNode node,TreeNode data){
+        List<TreeNode> mres = new ArrayList<>();
+        if(node == null) return mres;
+
+        if(node == data) {
+            mres.add(node);
+            return mres;
+        }
+
+        List<TreeNode> lres = nodeToRoot(node.left, data);
+        if(lres.size() > 0) {
+            lres.add(node);
+            return lres;
+        }
+        List<TreeNode> rres = nodeToRoot(node.right, data);
+        if(rres.size() > 0) {
+            rres.add(node);
+            return rres;
+        }
+        return mres;
+    }
+    public void kDown(TreeNode node,int k,TreeNode blockage,List<Integer> res){
+        if(node == null || node == blockage){
+            return; 
+        }
+        
+        if(k==0){
+            res.add(node.val);
+            return;
+        }
+        
+        kDown(node.left,k-1,blockage,res);
+        kDown(node.right,k-1,blockage,res);
+        
+    }
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        List<TreeNode> path =nodeToRoot(root,target);
+        List<Integer> res = new ArrayList<>();
+        TreeNode blockage = null;
+        for(int i=0;i<path.size() && k-i>=0;i++){
+            TreeNode node = path.get(i);
+            kDown(node,k-i,blockage,res);
+            blockage = node;
+        }
+        
+        return res;
+    }
+}

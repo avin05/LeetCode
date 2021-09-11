@@ -1,0 +1,23 @@
+class Solution {
+    public int numSubarrayBoundedMax(int[] nums, int left, int right) {
+        int prevc = 0;
+        int count =0;
+        int i=0,j=0;
+        
+        while(j<nums.length){
+            if(left<=nums[j] && nums[j]<=right){
+                prevc = j-i+1;
+                count+=prevc;
+            }else if(nums[j]<left){
+                count+=prevc;
+            }else{
+                prevc = 0;
+                i = j+1;
+            }
+            
+            j++;
+        }
+        
+        return count;
+    }
+}

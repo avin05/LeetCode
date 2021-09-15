@@ -1,0 +1,48 @@
+class Solution {
+    public void config(char[] arr,int i,int j){
+        if(arr[i]=='L' && arr[j]=='L'){
+            for(int k=i+1;k<j;k++){
+                arr[k]='L';
+            }
+        }else if(arr[i]=='R' && arr[j]=='R'){
+            for(int k=i+1;k<j;k++){
+                arr[k]='R';
+            }
+        }else if(arr[i]=='L'&&arr[j]=='R'){
+            
+        }else{
+            while(i<j){
+                arr[i++]='R';
+                arr[j--]='L';
+            }
+        }
+    }
+    public String pushDominoes(String dominoes) {
+        int l = dominoes.length();
+        char[] arr = new char[l+2];
+        arr[0]='L';
+        arr[l+1]='R';
+        for(int i=1;i<=l;i++){
+            arr[i]= dominoes.charAt(i-1);
+        }
+        int i=0,j=1;
+        
+        while(j<arr.length){
+            while(arr[j]=='.'){
+                j++;
+            }
+            
+            if(j-i>1){
+                config(arr,i,j);
+            }
+            i = j;
+            j++;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        for(int k=1;k<arr.length-1;k++){
+            sb.append(arr[k]);
+        }
+        return sb.toString();
+    }
+}

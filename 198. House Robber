@@ -1,0 +1,19 @@
+class Solution {
+    public int robber(int[] nums,int index,Integer[] dp){
+        if(index>=nums.length){
+            return 0;
+        }
+        if(dp[index]!=null){
+            return dp[index];
+        }
+        
+        int robVal = nums[index]+robber(nums,index+2,dp);
+        int withoutRob = robber(nums,index+1,dp);
+        
+        return dp[index]=Math.max(robVal,withoutRob);
+    }
+    public int rob(int[] nums) {
+        Integer[] dp = new Integer[nums.length];
+        return robber(nums,0,dp);
+    }
+}

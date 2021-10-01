@@ -1,0 +1,76 @@
+class Solution {
+    public int maxSumTwoNoOverlap(int[] nums, int firstLen, int secondLen) {
+        int n = nums.length;
+        int[] dp1 = new int[n];
+        int[] dp2 = new int[n];
+        int x =firstLen;
+        int y = secondLen;
+        
+        int sum =0;
+        
+        for(int i=0;i<n;i++){
+            if(i<x){
+                sum+=nums[i];
+                dp1[i]=sum;
+            }else{
+                sum+=nums[i]-nums[i-x];
+                dp1[i]=Math.max(sum,dp1[i-1]);
+            }
+        }
+        
+        sum =0;
+        
+        for(int j=n-1;j>=0;j--){
+            if(j+y>=n){
+                sum+=nums[j];
+                dp2[j]=sum;
+            }else{
+                sum += nums[j]-nums[j+y];
+                dp2[j]=Math.max(sum,dp2[j+1]);
+            }
+        }
+        
+        int ans =0;
+        for(int i=x-1;i<n-y;i++){
+            ans= Math.max(ans,dp1[i]+dp2[i+1]);
+        }
+        
+         dp1 = new int[n];
+         dp2 = new int[n];
+        //int x =firstLen;
+        //int y = secondLen;
+        
+         sum =0;
+        
+        for(int i=0;i<n;i++){
+            if(i<y){
+                sum+=nums[i];
+                dp1[i]=sum;
+            }else{
+                sum+=nums[i]-nums[i-y];
+                dp1[i]=Math.max(sum,dp1[i-1]);
+            }
+        }
+        
+        sum =0;
+        
+        for(int j=n-1;j>=0;j--){
+            if(j+x>=n){
+                sum+=nums[j];
+                dp2[j]=sum;
+            }else{
+                sum+= nums[j]-nums[j+x];
+                dp2[j]=Math.max(sum,dp2[j+1]);
+            }
+        }
+        
+        
+        for(int i=y-1;i<n-x;i++){
+            ans= Math.max(ans,dp1[i]+dp2[i+1]);
+        }
+        
+        return ans;
+        
+        
+    }
+}

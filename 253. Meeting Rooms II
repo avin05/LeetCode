@@ -1,0 +1,20 @@
+// Line Sweep Algorithm
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        TreeMap<Integer,Integer> map = new TreeMap<>();
+        int min = 0;
+        for(int[] interval: intervals){
+            int start = interval[0];
+            int end = interval[1];
+            map.put(start,map.getOrDefault(start,0)+1);
+            map.put(end,map.getOrDefault(end,0)-1);
+            
+        }
+        int rooms = 0;
+        for(int val: map.keySet()){
+            rooms+= map.get(val);
+            min = Math.max(min,rooms);
+        }
+        return min;
+    }
+}

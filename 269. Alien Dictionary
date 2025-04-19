@@ -1,0 +1,79 @@
+class Solution {
+    public String alienOrder(String[] words) {
+        StringBuilder res = new StringBuilder();
+        HashMap<Character, Set<Character>> graph = new HashMap<>();
+        HashMap<Character, Integer> inDegree = new HashMap<>();
+        int n = words.length;
+        for (String word : words) {
+            for (char ch : word.toCharArray()) {
+                graph.putIfAbsent(ch, new HashSet<>());
+                inDegree.putIfAbsent(ch, 0);
+            }
+        }
+
+        for (int i = 0; i < n - 1; i++) {
+            String curr = words[i];
+            String next = words[i + 1];
+
+            int len = Math.min(curr.length(), next.length());
+            boolean foundDifference = false;
+            for (int j = 0; j < len; j++) {
+                char ch1 = curr.charAt(j);
+                char ch2 = next.charAt(j);
+                if (ch1 != ch2) {
+                    if (graph.containsKey(ch1) && graph.get(ch1).contains(ch2)) {
+                        foundDifference = true;
+                        break;
+                    }
+                    if (graph.containsKey(ch1)) {
+                        Set<Character> set = graph.get(ch1);
+                        set.add(ch2);
+                        graph.put(ch1, set);
+                    } else {
+                        Set<Character> set = new HashSet<>();
+                        set.add(ch2);
+                        graph.put(ch1, set);
+                    }
+                    if (inDegree.containsKey(ch2)) {
+                        int degree = inDegree.get(ch2);
+                        inDegree.put(ch2, degree + 1);
+                    } else {
+                        inDegree.put(ch2, 1);
+                    }
+                    inDegree.put(ch1, inDegree.getOrDefault(ch1, 0) + 0);
+                    foundDifference = true;
+                    break;
+                }
+            }
+
+            if (!foundDifference && curr.length() > next.length())
+                return "";
+        }
+
+        int count = 0;
+        Queue<Character> q = new LinkedList<>();
+        for (Character ch : inDegree.keySet()) {
+            if (inDegree.get(ch) == 0)
+                q.add(ch);
+        }
+        while (q.size() > 0) {
+            char rem = q.remove();
+            res.append(rem);
+            count++;
+
+            Set<Character> neighbours = graph.get(rem);
+            if (neighbours != null) {
+                for (char neighbour : neighbours) {
+                    inDegree.put(neighbour, inDegree.get(neighbour) - 1);
+                    if (inDegree.get(neighbour) == 0) {
+                        q.add(neighbour);
+                    }
+                }
+            }
+
+        }
+        if (count != inDegree.size())
+            return "";
+        return res.toString();
+    }
+}

@@ -1,0 +1,120 @@
+class SnakeGame {
+    int width;
+    int height;
+    int[][] food;
+    int score;
+    Set<String> snake;
+    Deque<int[]> q;
+    int[] xDir = { -1, 0, 1, 0 };
+    int[] yDir = { 0, -1, 0, 1 };
+    int i;
+    int n;
+
+    public SnakeGame(int width, int height, int[][] food) {
+        this.width = width;
+        this.height = height;
+        this.food = food;
+        i = 0;
+        n = food.length;
+        score = 0;
+        q = new LinkedList<>();
+        q.add(new int[] { 0, 0 });
+        snake = new HashSet<>();
+        snake.add(0 + "," + 0);
+    }
+
+    public int[] getNewDir(String dir) {
+        int x, y;
+        int[] dirOld = q.peekLast();
+
+        if (dir.equals("U")) {
+            x = dirOld[0] + xDir[0];
+            y = dirOld[1] + yDir[0];
+            return new int[] { x, y };
+        } else if (dir.equals("L")) {
+            x = dirOld[0] + xDir[1];
+            y = dirOld[1] + yDir[1];
+            return new int[] { x, y };
+        } else if (dir.equals("D")) {
+            x = dirOld[0] + xDir[2];
+            y = dirOld[1] + yDir[2];
+            return new int[] { x, y };
+        } else {
+            x = dirOld[0] + xDir[3];
+            y = dirOld[1] + yDir[3];
+            return new int[] { x, y };
+        }
+    }
+
+    // public int move(String direction) {
+    //     int[] newDir = getNewDir(direction);
+    //     int x = newDir[0];
+    //     int y = newDir[1];
+    //     if (x < 0 || x >= height || y >= width || y < 0) {
+    //         return -1;
+    //     }
+
+    //     if (i >= n) {
+    //         return score;
+    //     }
+
+    //     String str = x + "," + y;
+    //     if (snake.contains(str)) {
+    //         return score;
+    //     }
+    //     int[] targetFood = food[i];
+    //     if (x == targetFood[0] && y == targetFood[1]) {
+    //         q.add(newDir);
+    //         snake.add(str);
+    //         score++;
+    //         i++;
+    //     } else {
+    //         int[] rem = q.remove();
+    //         String remStr = rem[0] + "," + rem[1];
+    //         snake.remove(remStr);
+    //         q.add(newDir);
+    //         snake.add(str);
+
+    //     }
+    //     return score;
+    // }
+    public int move(String direction) {
+    int[] newDir = getNewDir(direction);
+    int x = newDir[0];
+    int y = newDir[1];
+
+    if (x < 0 || x >= height || y >= width || y < 0) {
+        return -1;
+    }
+
+    String str = x + "," + y;
+    int[] rem = q.peekFirst();                      
+    String remStr = rem[0] + "," + rem[1];
+    snake.remove(remStr);                           
+
+    if (snake.contains(str)) {
+        return -1;
+    }
+
+    q.add(newDir);
+    snake.add(str);
+
+    int[] targetFood = i < n ? food[i] : null;
+    if (targetFood != null && x == targetFood[0] && y == targetFood[1]) {
+        score++;
+        i++;
+        snake.add(remStr);                         
+    } else {
+        q.remove();                                
+    }
+
+    return score;
+}
+
+}
+
+/**
+ * Your SnakeGame object will be instantiated and called as such:
+ * SnakeGame obj = new SnakeGame(width, height, food);
+ * int param_1 = obj.move(direction);
+ */
